@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,10 +14,9 @@ namespace SCNMonitor
     public partial class MainWindow : Form
     {
         const int RELOAD_INTERVAL = 60;
-        const int WARNING_THRESHOLD = 40;
+        const int WARNING_THRESHOLD = 80;
 
         private SCNClient scn;
-        private Timer timer;
         private int timeToReload = 0;
         private bool warned = false;
         private bool exit = false;
@@ -26,22 +26,9 @@ namespace SCNMonitor
             InitializeComponent();
 
             scn = new SCNClient("http://www.scn.put.poznan.pl/main.php");
-            timer = new Timer();
-            timer.Tick += new EventHandler(OnTimer);
 
             notifyIcon.Icon = DrawIcon();
-
-            timer.Interval = 1000;
             timer.Start();
-        }
-
-        private async void OnTimer(object sender, EventArgs e)
-        {
-            timeToReload--;
-            if (timeToReload <= 0)
-            {
-                await CheckTransfer();
-            }
         }
 
         private Icon DrawIcon(int percentage = -1)
@@ -122,11 +109,16 @@ namespace SCNMonitor
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!exit)
+            if (exit)
+            {
+                notifyIcon.Visible = false;
+            }
+            else
             {
                 Hide();
                 e.Cancel = true;
             }
+            
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -139,7 +131,24 @@ namespace SCNMonitor
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (Visible) Hide(); else Show();
+                if (Visible)
+                {
+                    Hide();
+                }
+                else
+                {
+                    Show();
+                    Activate();
+                }
+            }
+        }
+
+        private async void timer_Tick(object sender, EventArgs e)
+        {
+            timeToReload--;
+            if (timeToReload <= 0)
+            {
+                await CheckTransfer();
             }
         }
     }
