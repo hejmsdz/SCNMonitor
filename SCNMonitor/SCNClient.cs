@@ -104,7 +104,7 @@ namespace SCNMonitor
 
             HtmlNodeCollection cells = html.DocumentNode.SelectNodes("//fieldset[position() = last() - 1]//table//td[@class='form_values']");
             HtmlNode span;
-            if (cells == null || cells.Count < 3 || (span = cells[2].FirstChild) == null)
+            if (cells == null || cells.Count < 3 || (span = cells[2].SelectSingleNode("span")) == null)
             {
                 throw new TransferCheckException("The table could not be found!");
             }
