@@ -17,13 +17,17 @@ namespace SCNMonitor
         private SCNClient scn;
         private Timer timer;
         private int timeToReload;
+        private bool exit = false;
 
         public MainWindow()
         {
             InitializeComponent();
+
             scn = new SCNClient("http://www.scn.put.poznan.pl/main.php");
             timer = new Timer();
             timer.Tick += new EventHandler(OnTimer);
+
+            notifyIcon.Icon = DrawIcon();
 
             timer.Interval = 1000;
             timer.Start();
@@ -36,6 +40,30 @@ namespace SCNMonitor
             if (timeToReload <= 0)
             {
                 await CheckTransfer();
+            }
+        }
+
+        private Icon DrawIcon(int percentage = -1)
+        {
+            int size = 0;
+            string text = "?";
+
+            if (percentage >= 0)
+            {
+                size = (percentage * 16) / 100;
+                text = percentage.ToString();
+            }
+
+            using (Bitmap bmp = new Bitmap(16, 16))
+            {
+                Graphics g = Graphics.FromImage(bmp);
+                Font font = new Font(FontFamily.GenericSansSerif, 8);
+                Brush brush = Brushes.White;
+
+                g.DrawString(text, font, brush, 0, 0);
+                g.FillRectangle(brush, 0, 14, size, 2);
+
+                return Icon.FromHandle(bmp.GetHicon());
             }
         }
 
@@ -69,11 +97,41 @@ namespace SCNMonitor
             total.Text = scn.Total.ToString() + " GB";
             usage.Text = scn.Percentage.ToString() + "%";
             usageBar.Value = scn.Percentage;
+
+            notifyIcon.Icon.Dispose();
+            notifyIcon.Icon = DrawIcon(scn.Percentage);
+
+            downloadedToolStripMenuItem.Text = "Downloaded: " + scn.Download.ToString() + " GB";
+            uploadedToolStripMenuItem.Text = "Uploaded: " + scn.Upload.ToString() + " GB";
+            totalToolStripMenuItem.Text = "Total: " + scn.Total.ToString() + " GB";
         }
 
         private async void login_Click(object sender, EventArgs e)
         {
             await CheckTransfer();
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!exit)
+            {
+                Hide();
+                e.Cancel = true;
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            exit = true;
+            Close();
+        }
+
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (Visible) Hide(); else Show();
+            }
         }
     }
 }

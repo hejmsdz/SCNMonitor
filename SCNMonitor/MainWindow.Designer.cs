@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.check = new System.Windows.Forms.Button();
             this.usageBar = new System.Windows.Forms.ProgressBar();
             this.downloadLabel = new System.Windows.Forms.Label();
@@ -38,6 +39,14 @@
             this.totalLabel = new System.Windows.Forms.Label();
             this.usage = new System.Windows.Forms.Label();
             this.usageLabel = new System.Windows.Forms.Label();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.downloadedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uploadedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.totalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // check
@@ -130,6 +139,57 @@
             this.usageLabel.TabIndex = 11;
             this.usageLabel.Text = "Usage:";
             // 
+            // notifyIcon
+            // 
+            this.notifyIcon.ContextMenuStrip = this.menu;
+            this.notifyIcon.Text = "SCN Monitor";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
+            // 
+            // menu
+            // 
+            this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.downloadedToolStripMenuItem,
+            this.uploadedToolStripMenuItem,
+            this.totalToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.exitToolStripMenuItem});
+            this.menu.Name = "menu";
+            this.menu.Size = new System.Drawing.Size(153, 98);
+            // 
+            // downloadedToolStripMenuItem
+            // 
+            this.downloadedToolStripMenuItem.Enabled = false;
+            this.downloadedToolStripMenuItem.Name = "downloadedToolStripMenuItem";
+            this.downloadedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.downloadedToolStripMenuItem.Text = "Downloaded: ?";
+            // 
+            // uploadedToolStripMenuItem
+            // 
+            this.uploadedToolStripMenuItem.Enabled = false;
+            this.uploadedToolStripMenuItem.Name = "uploadedToolStripMenuItem";
+            this.uploadedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.uploadedToolStripMenuItem.Text = "Uploaded: ?";
+            // 
+            // totalToolStripMenuItem
+            // 
+            this.totalToolStripMenuItem.Enabled = false;
+            this.totalToolStripMenuItem.Name = "totalToolStripMenuItem";
+            this.totalToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.totalToolStripMenuItem.Text = "Total: ?";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,7 +207,10 @@
             this.Controls.Add(this.check);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "MainWindow";
+            this.ShowInTaskbar = false;
             this.Text = "SCN Monitor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
+            this.menu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -164,6 +227,13 @@
         private System.Windows.Forms.Label totalLabel;
         private System.Windows.Forms.Label usage;
         private System.Windows.Forms.Label usageLabel;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip menu;
+        private System.Windows.Forms.ToolStripMenuItem downloadedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uploadedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem totalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
