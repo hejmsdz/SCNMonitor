@@ -141,6 +141,7 @@
             // 
             // notifyIcon
             // 
+            this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
             this.notifyIcon.ContextMenuStrip = this.menu;
             this.notifyIcon.Text = "SCN Monitor";
             this.notifyIcon.Visible = true;

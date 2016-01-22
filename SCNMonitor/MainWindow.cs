@@ -13,10 +13,12 @@ namespace SCNMonitor
     public partial class MainWindow : Form
     {
         const int RELOAD_INTERVAL = 60;
+        const int WARNING_THRESHOLD = 40;
 
         private SCNClient scn;
         private Timer timer;
-        private int timeToReload;
+        private int timeToReload = 0;
+        private bool warned = false;
         private bool exit = false;
 
         public MainWindow()
@@ -31,7 +33,6 @@ namespace SCNMonitor
 
             timer.Interval = 1000;
             timer.Start();
-            timeToReload = 0;
         }
 
         private async void OnTimer(object sender, EventArgs e)
@@ -58,10 +59,11 @@ namespace SCNMonitor
             {
                 Graphics g = Graphics.FromImage(bmp);
                 Font font = new Font(FontFamily.GenericSansSerif, 8);
-                Brush brush = Brushes.White;
+                Brush textBrush = Brushes.White;
+                Brush lineBrush = warned ? Brushes.Red : Brushes.White;
 
-                g.DrawString(text, font, brush, 0, 0);
-                g.FillRectangle(brush, 0, 14, size, 2);
+                g.DrawString(text, font, textBrush, 0, 0);
+                g.FillRectangle(lineBrush, 0, 14, size, 2);
 
                 return Icon.FromHandle(bmp.GetHicon());
             }
@@ -98,12 +100,19 @@ namespace SCNMonitor
             usage.Text = scn.Percentage.ToString() + "%";
             usageBar.Value = scn.Percentage;
 
-            notifyIcon.Icon.Dispose();
-            notifyIcon.Icon = DrawIcon(scn.Percentage);
-
             downloadedToolStripMenuItem.Text = "Downloaded: " + scn.Download.ToString() + " GB";
             uploadedToolStripMenuItem.Text = "Uploaded: " + scn.Upload.ToString() + " GB";
             totalToolStripMenuItem.Text = "Total: " + scn.Total.ToString() + " GB";
+
+            if (scn.Percentage >= WARNING_THRESHOLD && !warned)
+            {
+                notifyIcon.BalloonTipText = "You've reached " + scn.Percentage.ToString() + "% of data usage.";
+                notifyIcon.ShowBalloonTip(5000);
+                warned = true;
+            }
+
+            notifyIcon.Icon.Dispose();
+            notifyIcon.Icon = DrawIcon(scn.Percentage);
         }
 
         private async void login_Click(object sender, EventArgs e)
