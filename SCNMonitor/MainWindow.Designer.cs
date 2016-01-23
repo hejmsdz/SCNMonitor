@@ -217,6 +217,7 @@
             this.ShowInTaskbar = false;
             this.Text = "SCN Monitor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
+            this.Shown += new System.EventHandler(this.MainWindow_Shown);
             this.menu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

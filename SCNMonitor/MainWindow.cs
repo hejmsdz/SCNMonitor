@@ -24,11 +24,18 @@ namespace SCNMonitor
         public MainWindow()
         {
             InitializeComponent();
-
             scn = new SCNClient("http://www.scn.put.poznan.pl/main.php");
-
             notifyIcon.Icon = DrawIcon();
             timer.Start();
+        }
+
+        private void MainWindow_Shown(object sender, EventArgs e)
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length >= 2 && args[1] == "-hide")
+            {
+                Hide();
+            }
         }
 
         private Icon DrawIcon(int percentage = -1)
@@ -70,7 +77,7 @@ namespace SCNMonitor
             }
             catch (TransferCheckException e)
             {
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                // MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             finally
