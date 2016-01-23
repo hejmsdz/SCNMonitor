@@ -47,6 +47,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.startup = new System.Windows.Forms.CheckBox();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -197,11 +198,23 @@
             this.timer.Interval = 1000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
+            // startup
+            // 
+            this.startup.AutoSize = true;
+            this.startup.Location = new System.Drawing.Point(177, 111);
+            this.startup.Name = "startup";
+            this.startup.Size = new System.Drawing.Size(143, 17);
+            this.startup.TabIndex = 13;
+            this.startup.Text = "Run on Windows startup";
+            this.startup.UseVisualStyleBackColor = true;
+            this.startup.Click += new System.EventHandler(this.startup_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(345, 231);
+            this.Controls.Add(this.startup);
             this.Controls.Add(this.usage);
             this.Controls.Add(this.usageLabel);
             this.Controls.Add(this.total);
@@ -243,6 +256,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.CheckBox startup;
     }
 }
 

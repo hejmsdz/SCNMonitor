@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -27,6 +28,8 @@ namespace SCNMonitor
             scn = new SCNClient("http://www.scn.put.poznan.pl/main.php");
             notifyIcon.Icon = DrawIcon();
             timer.Start();
+
+            startup.Checked = CheckStartup();
         }
 
         private void MainWindow_Shown(object sender, EventArgs e)
@@ -156,6 +159,37 @@ namespace SCNMonitor
             if (timeToReload <= 0)
             {
                 await CheckTransfer();
+            }
+        }
+
+        private void SetStartup()
+        {
+            string exec = '"'+Application.ExecutablePath + '"' + " -hide";
+            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            rkApp.SetValue("SCNMonitor", exec);
+        }
+
+        private void UnsetStartup()
+        {
+            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            rkApp.DeleteValue("SCNMonitor");
+        }
+
+        private bool CheckStartup()
+        {
+            RegistryKey rkApp = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            return rkApp.GetValue("SCNMonitor") != null;
+        }
+
+        private void startup_Click(object sender, EventArgs e)
+        {
+            if (startup.Checked)
+            {
+                SetStartup();
+            }
+            else
+            {
+                UnsetStartup();
             }
         }
     }
