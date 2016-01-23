@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,22 +19,60 @@ namespace SCNMonitor
         const int WARNING_THRESHOLD = 80;
 
         private SCNClient scn;
+        private NetworkChecker netCheck;
         private int timeToReload = 0;
+        private bool ready = false;
         private bool warned = false;
         private bool exit = false;
+
+        delegate void UpdateUICallback();
 
         public MainWindow()
         {
             InitializeComponent();
             scn = new SCNClient("http://www.scn.put.poznan.pl/main.php");
+            netCheck = new NetworkChecker();
+            netCheck.StateChanged += Netcheck_StateChanged;
             notifyIcon.Icon = DrawIcon();
-            timer.Start();
 
             startup.Checked = CheckStartup();
         }
 
+        private void UpdateUI()
+        {
+            if (netCheck.State)
+            {
+                Text = "SCNMonitor [connected]";
+                timer.Start();
+                if (ready)
+                {
+                    Notify(ToolTipIcon.Info, "You are now connected to the SCN.");
+                }
+            }
+            else
+            {
+                Text = "SCNMonitor [disconnected]";
+                timer.Stop();
+                notifyIcon.Icon.Dispose();
+                notifyIcon.Icon = DrawIcon();
+                if (ready)
+                {
+                    Notify(ToolTipIcon.Info, "You are now disconnected from the SCN.");
+                }
+            }
+            ready = true;
+        }
+
+        private void Netcheck_StateChanged(object sender, EventArgs e)
+        {
+            UpdateUICallback d = new UpdateUICallback(UpdateUI);
+            Invoke(d);
+        }
+
         private void MainWindow_Shown(object sender, EventArgs e)
         {
+            netCheck.Check();
+
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length >= 2 && args[1] == "-hide")
             {
@@ -64,6 +103,13 @@ namespace SCNMonitor
 
                 return Icon.FromHandle(bmp.GetHicon());
             }
+        }
+
+        private void Notify(ToolTipIcon icon, string message, int duration = 5000)
+        {
+            notifyIcon.BalloonTipIcon = icon;
+            notifyIcon.BalloonTipText = message;
+            notifyIcon.ShowBalloonTip(duration);
         }
 
         private async Task CheckTransfer()
@@ -103,8 +149,7 @@ namespace SCNMonitor
 
             if (scn.Percentage >= WARNING_THRESHOLD && !warned)
             {
-                notifyIcon.BalloonTipText = "You've reached " + scn.Percentage.ToString() + "% of data usage.";
-                notifyIcon.ShowBalloonTip(5000);
+                Notify(ToolTipIcon.Warning, "You've reached " + scn.Percentage.ToString() + "% of data usage.");
                 warned = true;
             }
 
