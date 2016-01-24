@@ -15,9 +15,6 @@ namespace SCNMonitor
 {
     public partial class MainWindow : Form
     {
-        const int RELOAD_INTERVAL = 60;
-        const int WARNING_THRESHOLD = 80;
-
         private SCNClient scn;
         private NetworkChecker netCheck;
         private int timeToReload = 0;
@@ -32,32 +29,41 @@ namespace SCNMonitor
             InitializeComponent();
             scn = new SCNClient("http://www.scn.put.poznan.pl/main.php");
             netCheck = new NetworkChecker();
-            netCheck.StateChanged += Netcheck_StateChanged;
+            if (Properties.Settings.Default.AutodetectNetwork)
+            {
+                netCheck.StateChanged += Netcheck_StateChanged;
+            }
+            else
+            {
+                timer.Start();
+            }
             notifyIcon.Icon = DrawIcon();
 
-            startup.Checked = CheckStartup();
+            PopulateSettings();
         }
 
         private void UpdateUI()
         {
             if (netCheck.State)
             {
-                Text = "SCNMonitor [connected]";
                 timer.Start();
-                if (ready)
+                Text = "SCN Monitor";
+                check.Enabled = true;
+                if (ready && Properties.Settings.Default.NotifyOnNetworkChange)
                 {
                     Notify(ToolTipIcon.Info, "You are now connected to the SCN.");
                 }
             }
             else
             {
-                Text = "SCNMonitor [disconnected]";
                 timer.Stop();
+                Text = "SCN Monitor (disconnected)";
+                check.Enabled = false;
                 notifyIcon.Icon.Dispose();
                 notifyIcon.Icon = DrawIcon();
-                if (ready)
+                if (ready && Properties.Settings.Default.NotifyOnNetworkChange)
                 {
-                    Notify(ToolTipIcon.Info, "You are now disconnected from the SCN.");
+                    Notify(ToolTipIcon.Info, "You are disconnected from the SCN.");
                 }
             }
             ready = true;
@@ -85,6 +91,10 @@ namespace SCNMonitor
             int size = 0;
             string text = "?";
 
+            Brush normalBrush = new SolidBrush(Properties.Settings.Default.TrayIconColor);
+            Brush warnBrush = new SolidBrush(Properties.Settings.Default.TrayIconWarningColor);
+            Font font = new Font(FontFamily.GenericSansSerif, 8);
+
             if (percentage >= 0)
             {
                 size = (percentage * 16) / 100;
@@ -94,9 +104,9 @@ namespace SCNMonitor
             using (Bitmap bmp = new Bitmap(16, 16))
             {
                 Graphics g = Graphics.FromImage(bmp);
-                Font font = new Font(FontFamily.GenericSansSerif, 8);
-                Brush textBrush = Brushes.White;
-                Brush lineBrush = warned ? Brushes.Red : Brushes.White;
+                
+                Brush textBrush = normalBrush;
+                Brush lineBrush = warned ? warnBrush : normalBrush;
 
                 g.DrawString(text, font, textBrush, 0, 0);
                 g.FillRectangle(lineBrush, 0, 14, size, 2);
@@ -133,13 +143,13 @@ namespace SCNMonitor
             {
                 check.Text = buttonText;
                 check.Enabled = true;
-                timeToReload = RELOAD_INTERVAL;
+                timeToReload = 60*Properties.Settings.Default.CheckInterval;
                 timer.Start();
             }
 
-            download.Text = scn.Download.ToString() + " GB";
-            upload.Text = scn.Upload.ToString() + " GB";
-            total.Text = scn.Total.ToString() + " GB";
+            download.Text = "Download: " + scn.Download.ToString() + " GB";
+            upload.Text = "Upload: " + scn.Upload.ToString() + " GB";
+            total.Text = "Total: " + scn.Total.ToString() + " GB";
             usage.Text = scn.Percentage.ToString() + "%";
             usageBar.Value = scn.Percentage;
 
@@ -147,7 +157,7 @@ namespace SCNMonitor
             uploadedToolStripMenuItem.Text = "Uploaded: " + scn.Upload.ToString() + " GB";
             totalToolStripMenuItem.Text = "Total: " + scn.Total.ToString() + " GB";
 
-            if (scn.Percentage >= WARNING_THRESHOLD && !warned)
+            if (scn.Percentage >= Properties.Settings.Default.WarningThreshold && !warned)
             {
                 Notify(ToolTipIcon.Warning, "You've reached " + scn.Percentage.ToString() + "% of data usage.");
                 warned = true;
@@ -217,7 +227,7 @@ namespace SCNMonitor
         private void UnsetStartup()
         {
             RegistryKey rkApp = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-            rkApp.DeleteValue("SCNMonitor");
+            if (CheckStartup()) rkApp.DeleteValue("SCNMonitor");
         }
 
         private bool CheckStartup()
@@ -226,9 +236,15 @@ namespace SCNMonitor
             return rkApp.GetValue("SCNMonitor") != null;
         }
 
-        private void startup_Click(object sender, EventArgs e)
+        private void saveSettings_Click(object sender, EventArgs e)
         {
-            if (startup.Checked)
+            Properties.Settings.Default.CheckInterval = (int)checkIntervalField.Value;
+            Properties.Settings.Default.WarningThreshold = (int)warningThresholdField.Value;
+            Properties.Settings.Default.AutodetectNetwork = autodetectCheckbox.Checked;
+            Properties.Settings.Default.NotifyOnNetworkChange = notifyCheckbox.Checked;
+            Properties.Settings.Default.Save();
+
+            if (startupCheckbox.Checked)
             {
                 SetStartup();
             }
@@ -236,6 +252,29 @@ namespace SCNMonitor
             {
                 UnsetStartup();
             }
+        }
+
+        private void PopulateSettings()
+        {
+            checkIntervalField.Value = Properties.Settings.Default.CheckInterval;
+            warningThresholdField.Value = Properties.Settings.Default.WarningThreshold;
+            autodetectCheckbox.Checked = Properties.Settings.Default.AutodetectNetwork;
+            notifyCheckbox.Checked = Properties.Settings.Default.NotifyOnNetworkChange;
+            startupCheckbox.Checked = CheckStartup();
+
+            notifyCheckbox.Enabled = autodetectCheckbox.Checked;
+        }
+
+        private void autodetectCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            notifyCheckbox.Enabled = autodetectCheckbox.Checked;
+        }
+
+        private void defaultSettings_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+            UnsetStartup();
+            PopulateSettings();
         }
     }
 }

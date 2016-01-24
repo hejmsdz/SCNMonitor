@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NetworkChecker.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="TransferCheckException.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
