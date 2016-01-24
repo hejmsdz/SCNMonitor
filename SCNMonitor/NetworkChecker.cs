@@ -29,7 +29,7 @@ namespace SCNMonitor
             NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(OnAddressChanged);
         }
 
-        public void Check()
+        public void Check(bool forceBroadcast = false)
         {
             bool newState = false;
             NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
@@ -41,7 +41,7 @@ namespace SCNMonitor
                 }
             }
 
-            if (newState != state)
+            if (newState != state || forceBroadcast)
             {
                 state = newState;
                 StateChanged(this, EventArgs.Empty);

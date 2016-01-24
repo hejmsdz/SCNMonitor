@@ -29,18 +29,24 @@ namespace SCNMonitor
             InitializeComponent();
             scn = new SCNClient("http://www.scn.put.poznan.pl/main.php");
             netCheck = new NetworkChecker();
-            if (Properties.Settings.Default.AutodetectNetwork)
-            {
-                netCheck.StateChanged += Netcheck_StateChanged;
-            }
-            else
+            netCheck.StateChanged += Netcheck_StateChanged;
+            if (!Properties.Settings.Default.AutodetectNetwork)
             {
                 timer.Start();
             }
             notifyIcon.Icon = DrawIcon();
 
             PopulateSettings();
+
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length >= 2 && args[1] == "-hide")
+            {
+                Opacity = 0;
+            }
         }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr w, IntPtr l);
 
         private void UpdateUI()
         {
@@ -71,18 +77,22 @@ namespace SCNMonitor
 
         private void Netcheck_StateChanged(object sender, EventArgs e)
         {
-            UpdateUICallback d = new UpdateUICallback(UpdateUI);
-            Invoke(d);
+            if (Properties.Settings.Default.AutodetectNetwork)
+            {
+                UpdateUICallback d = new UpdateUICallback(UpdateUI);
+                Invoke(d);
+            }                       
         }
 
         private void MainWindow_Shown(object sender, EventArgs e)
         {
-            netCheck.Check();
+            netCheck.Check(true);
 
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length >= 2 && args[1] == "-hide")
             {
                 Hide();
+                Opacity = 1;
             }
         }
 
@@ -160,14 +170,20 @@ namespace SCNMonitor
             if (scn.Percentage >= Properties.Settings.Default.WarningThreshold && !warned)
             {
                 Notify(ToolTipIcon.Warning, "You've reached " + scn.Percentage.ToString() + "% of data usage.");
+                SendMessage(usageBar.Handle, 1040, (IntPtr)2, IntPtr.Zero);
                 warned = true;
+            }
+            else if (warned)
+            {
+                // warning threshold has been increased
+                SendMessage(usageBar.Handle, 1040, (IntPtr)1, IntPtr.Zero);
             }
 
             notifyIcon.Icon.Dispose();
             notifyIcon.Icon = DrawIcon(scn.Percentage);
         }
 
-        private async void login_Click(object sender, EventArgs e)
+        private async void check_Click(object sender, EventArgs e)
         {
             await CheckTransfer();
         }
@@ -211,6 +227,7 @@ namespace SCNMonitor
         private async void timer_Tick(object sender, EventArgs e)
         {
             timeToReload--;
+            // check.Text = "Reload [" + timeToReload.ToString() + "]";
             if (timeToReload <= 0)
             {
                 await CheckTransfer();
@@ -238,11 +255,30 @@ namespace SCNMonitor
 
         private void saveSettings_Click(object sender, EventArgs e)
         {
+            bool autodetectChange = autodetectCheckbox.Checked != Properties.Settings.Default.AutodetectNetwork;
+
             Properties.Settings.Default.CheckInterval = (int)checkIntervalField.Value;
             Properties.Settings.Default.WarningThreshold = (int)warningThresholdField.Value;
             Properties.Settings.Default.AutodetectNetwork = autodetectCheckbox.Checked;
             Properties.Settings.Default.NotifyOnNetworkChange = notifyCheckbox.Checked;
             Properties.Settings.Default.Save();
+            saveSettings.Enabled = false;
+
+            timeToReload = 0;
+
+            if (autodetectChange)
+            {
+                if (Properties.Settings.Default.AutodetectNetwork)
+                {
+                    timer.Stop();
+                    netCheck.Check(true);
+                }
+                else
+                {
+                    timer.Start();
+                    Text = "SCN Monitor";
+                }
+            }
 
             if (startupCheckbox.Checked)
             {
@@ -254,6 +290,12 @@ namespace SCNMonitor
             }
         }
 
+        private void settingsChanged(object sender, EventArgs e)
+        {
+            saveSettings.Enabled = true;
+            defaultSettings.Enabled = true;
+        }
+
         private void PopulateSettings()
         {
             checkIntervalField.Value = Properties.Settings.Default.CheckInterval;
@@ -262,10 +304,10 @@ namespace SCNMonitor
             notifyCheckbox.Checked = Properties.Settings.Default.NotifyOnNetworkChange;
             startupCheckbox.Checked = CheckStartup();
 
-            notifyCheckbox.Enabled = autodetectCheckbox.Checked;
+            saveSettings.Enabled = false;
         }
 
-        private void autodetectCheckbox_CheckedChanged(object sender, EventArgs e)
+        private void autodetectCheckbox_CheckStateChanged(object sender, EventArgs e)
         {
             notifyCheckbox.Enabled = autodetectCheckbox.Checked;
         }
@@ -275,6 +317,7 @@ namespace SCNMonitor
             Properties.Settings.Default.Reset();
             UnsetStartup();
             PopulateSettings();
+            saveSettings.Enabled = false;
         }
     }
 }

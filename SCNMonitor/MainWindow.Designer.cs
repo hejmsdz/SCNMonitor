@@ -180,12 +180,13 @@
             // startupCheckbox
             // 
             this.startupCheckbox.AutoSize = true;
-            this.startupCheckbox.Location = new System.Drawing.Point(3, 101);
+            this.startupCheckbox.Location = new System.Drawing.Point(3, 109);
             this.startupCheckbox.Name = "startupCheckbox";
             this.startupCheckbox.Size = new System.Drawing.Size(143, 17);
             this.startupCheckbox.TabIndex = 13;
             this.startupCheckbox.Text = "Run on Windows startup";
             this.startupCheckbox.UseVisualStyleBackColor = true;
+            this.startupCheckbox.CheckedChanged += new System.EventHandler(this.settingsChanged);
             // 
             // tabControl
             // 
@@ -328,6 +329,7 @@
             this.check.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.check.UseVisualStyleBackColor = true;
+            this.check.Click += new System.EventHandler(this.check_Click);
             // 
             // exitButton
             // 
@@ -368,8 +370,8 @@
             this.optionsTable.Location = new System.Drawing.Point(3, 3);
             this.optionsTable.Name = "optionsTable";
             this.optionsTable.RowCount = 6;
-            this.optionsTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.optionsTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.optionsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.optionsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.optionsTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.optionsTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.optionsTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -380,23 +382,25 @@
             // autodetectCheckbox
             // 
             this.autodetectCheckbox.AutoSize = true;
-            this.autodetectCheckbox.Location = new System.Drawing.Point(3, 55);
+            this.autodetectCheckbox.Location = new System.Drawing.Point(3, 63);
             this.autodetectCheckbox.Name = "autodetectCheckbox";
             this.autodetectCheckbox.Size = new System.Drawing.Size(195, 17);
             this.autodetectCheckbox.TabIndex = 18;
             this.autodetectCheckbox.Text = "Autodetect if connected to the SCN";
             this.autodetectCheckbox.UseVisualStyleBackColor = true;
-            this.autodetectCheckbox.CheckedChanged += new System.EventHandler(this.autodetectCheckbox_CheckedChanged);
+            this.autodetectCheckbox.CheckedChanged += new System.EventHandler(this.settingsChanged);
+            this.autodetectCheckbox.CheckStateChanged += new System.EventHandler(this.autodetectCheckbox_CheckStateChanged);
             // 
             // notifyCheckbox
             // 
             this.notifyCheckbox.AutoSize = true;
-            this.notifyCheckbox.Location = new System.Drawing.Point(3, 78);
+            this.notifyCheckbox.Location = new System.Drawing.Point(3, 86);
             this.notifyCheckbox.Name = "notifyCheckbox";
             this.notifyCheckbox.Size = new System.Drawing.Size(205, 17);
             this.notifyCheckbox.TabIndex = 19;
             this.notifyCheckbox.Text = "Notify when connected/disconnected";
             this.notifyCheckbox.UseVisualStyleBackColor = true;
+            this.notifyCheckbox.CheckedChanged += new System.EventHandler(this.settingsChanged);
             // 
             // optionsButtonsTable
             // 
@@ -406,28 +410,29 @@
             this.optionsButtonsTable.Controls.Add(this.saveSettings, 1, 0);
             this.optionsButtonsTable.Controls.Add(this.defaultSettings, 0, 0);
             this.optionsButtonsTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.optionsButtonsTable.Location = new System.Drawing.Point(3, 124);
+            this.optionsButtonsTable.Location = new System.Drawing.Point(3, 132);
             this.optionsButtonsTable.Name = "optionsButtonsTable";
             this.optionsButtonsTable.RowCount = 1;
             this.optionsButtonsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.optionsButtonsTable.Size = new System.Drawing.Size(407, 48);
+            this.optionsButtonsTable.Size = new System.Drawing.Size(407, 40);
             this.optionsButtonsTable.TabIndex = 20;
             // 
             // saveSettings
             // 
             this.saveSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveSettings.Location = new System.Drawing.Point(329, 22);
+            this.saveSettings.Enabled = false;
+            this.saveSettings.Location = new System.Drawing.Point(329, 14);
             this.saveSettings.Name = "saveSettings";
             this.saveSettings.Size = new System.Drawing.Size(75, 23);
             this.saveSettings.TabIndex = 20;
-            this.saveSettings.Text = "OK";
+            this.saveSettings.Text = "Apply";
             this.saveSettings.UseVisualStyleBackColor = true;
             this.saveSettings.Click += new System.EventHandler(this.saveSettings_Click);
             // 
             // defaultSettings
             // 
             this.defaultSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.defaultSettings.Location = new System.Drawing.Point(3, 22);
+            this.defaultSettings.Location = new System.Drawing.Point(3, 14);
             this.defaultSettings.Name = "defaultSettings";
             this.defaultSettings.Size = new System.Drawing.Size(101, 23);
             this.defaultSettings.TabIndex = 21;
@@ -449,7 +454,7 @@
             this.checkIntervalTable.Name = "checkIntervalTable";
             this.checkIntervalTable.RowCount = 1;
             this.checkIntervalTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.checkIntervalTable.Size = new System.Drawing.Size(407, 20);
+            this.checkIntervalTable.Size = new System.Drawing.Size(407, 24);
             this.checkIntervalTable.TabIndex = 21;
             // 
             // checkIntervalField
@@ -473,6 +478,7 @@
             0,
             0,
             0});
+            this.checkIntervalField.ValueChanged += new System.EventHandler(this.settingsChanged);
             // 
             // checkIntervalLabel
             // 
@@ -480,7 +486,7 @@
             this.checkIntervalLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkIntervalLabel.Location = new System.Drawing.Point(3, 0);
             this.checkIntervalLabel.Name = "checkIntervalLabel";
-            this.checkIntervalLabel.Size = new System.Drawing.Size(125, 20);
+            this.checkIntervalLabel.Size = new System.Drawing.Size(125, 24);
             this.checkIntervalLabel.TabIndex = 19;
             this.checkIntervalLabel.Text = "Check your usage every:";
             this.checkIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -491,9 +497,9 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(207, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(197, 20);
+            this.label1.Size = new System.Drawing.Size(197, 24);
             this.label1.TabIndex = 21;
-            this.label1.Text = "minutes";
+            this.label1.Text = "min.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tableLayoutPanel3
@@ -506,11 +512,11 @@
             this.tableLayoutPanel3.Controls.Add(this.warningThresholdLabel, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.label2, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 29);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 33);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(407, 20);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(407, 24);
             this.tableLayoutPanel3.TabIndex = 22;
             // 
             // warningThresholdField
@@ -519,6 +525,7 @@
             this.warningThresholdField.Name = "warningThresholdField";
             this.warningThresholdField.Size = new System.Drawing.Size(67, 20);
             this.warningThresholdField.TabIndex = 23;
+            this.warningThresholdField.ValueChanged += new System.EventHandler(this.settingsChanged);
             // 
             // warningThresholdLabel
             // 
@@ -526,7 +533,7 @@
             this.warningThresholdLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.warningThresholdLabel.Location = new System.Drawing.Point(3, 0);
             this.warningThresholdLabel.Name = "warningThresholdLabel";
-            this.warningThresholdLabel.Size = new System.Drawing.Size(96, 20);
+            this.warningThresholdLabel.Size = new System.Drawing.Size(96, 24);
             this.warningThresholdLabel.TabIndex = 22;
             this.warningThresholdLabel.Text = "Warning threshold:";
             this.warningThresholdLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -534,11 +541,13 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Location = new System.Drawing.Point(178, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(15, 13);
+            this.label2.Size = new System.Drawing.Size(226, 24);
             this.label2.TabIndex = 24;
             this.label2.Text = "%";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainWindow
             // 
