@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,6 +21,7 @@ namespace SCNMonitor
         private NetworkChecker netCheck;
         private int timeToReload = 0;
         private bool ready = false;
+        private bool hidden = false;
         private bool warned = false;
         private bool exit = false;
 
@@ -39,37 +42,64 @@ namespace SCNMonitor
             PopulateSettings();
 
             string[] args = Environment.GetCommandLineArgs();
-            if (args.Length >= 2 && args[1] == "-hide")
-            {
-                Opacity = 0;
-            }
+            hidden = (args.Length >= 2 && args[1] == "-hide");
+
+            TranslateUI();
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
         static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr w, IntPtr l);
+
+        private void TranslateUI()
+        {
+            Text = Properties.Resources.Title;
+            statusTab.Text = Properties.Resources.Status;
+            usageBox.Text = Properties.Resources.Usage;
+            detailsBox.Text = Properties.Resources.Details;
+            usageBox.Text = Properties.Resources.Usage;
+            download.Text = string.Format(Properties.Resources.Download, "?");
+            upload.Text = string.Format(Properties.Resources.Upload, "?");
+            total.Text = string.Format(Properties.Resources.Total, "?");
+            downloadedToolStripMenuItem.Text = download.Text;
+            uploadedToolStripMenuItem.Text = upload.Text;
+            totalToolStripMenuItem.Text = total.Text;
+            check.Text = Properties.Resources.Check;
+            exitButton.Text = Properties.Resources.Exit;
+            exitToolStripMenuItem.Text = Properties.Resources.Exit;
+            optionsTab.Text = Properties.Resources.Options;
+            checkIntervalLabel.Text = Properties.Resources.CheckInterval;
+            minute.Text = Properties.Resources.Minutes;
+            warningThresholdLabel.Text = Properties.Resources.WarningThreshold;
+            percent.Text = Properties.Resources.Percent;
+            autodetectCheckbox.Text = Properties.Resources.Autodetect;
+            notifyCheckbox.Text = Properties.Resources.Notify;
+            startupCheckbox.Text = Properties.Resources.Startup;
+            saveSettings.Text = Properties.Resources.Apply;
+            defaultSettings.Text = Properties.Resources.Defaults;
+        }
 
         private void UpdateUI()
         {
             if (netCheck.State)
             {
                 timer.Start();
-                Text = "SCN Monitor";
+                Text = Properties.Resources.Title;
                 check.Enabled = true;
                 if (ready && Properties.Settings.Default.NotifyOnNetworkChange)
                 {
-                    Notify(ToolTipIcon.Info, "You are now connected to the SCN.");
+                    Notify(ToolTipIcon.Info, Properties.Resources.ConnectedMsg);
                 }
             }
             else
             {
                 timer.Stop();
-                Text = "SCN Monitor (disconnected)";
+                Text = Properties.Resources.Title+" "+Properties.Resources.Disconnected;
                 check.Enabled = false;
                 notifyIcon.Icon.Dispose();
                 notifyIcon.Icon = DrawIcon();
                 if (ready && Properties.Settings.Default.NotifyOnNetworkChange)
                 {
-                    Notify(ToolTipIcon.Info, "You are disconnected from the SCN.");
+                    Notify(ToolTipIcon.Info, Properties.Resources.DisconnectedMsg);
                 }
             }
             ready = true;
@@ -88,8 +118,7 @@ namespace SCNMonitor
         {
             netCheck.Check(true);
 
-            string[] args = Environment.GetCommandLineArgs();
-            if (args.Length >= 2 && args[1] == "-hide")
+            if (hidden)
             {
                 Hide();
                 Opacity = 1;
@@ -137,7 +166,7 @@ namespace SCNMonitor
             timer.Stop();
 
             string buttonText = check.Text;
-            check.Text = "Checking...";
+            check.Text = Properties.Resources.Checking;
             check.Enabled = false;
 
             try
@@ -157,19 +186,19 @@ namespace SCNMonitor
                 timer.Start();
             }
 
-            download.Text = "Download: " + scn.Download.ToString() + " GB";
-            upload.Text = "Upload: " + scn.Upload.ToString() + " GB";
-            total.Text = "Total: " + scn.Total.ToString() + " GB";
+            download.Text = string.Format(Properties.Resources.Download, scn.Download);
+            upload.Text = string.Format(Properties.Resources.Upload, scn.Upload);
+            total.Text = string.Format(Properties.Resources.Total, scn.Total);
             usage.Text = scn.Percentage.ToString() + "%";
             usageBar.Value = scn.Percentage;
 
-            downloadedToolStripMenuItem.Text = "Downloaded: " + scn.Download.ToString() + " GB";
-            uploadedToolStripMenuItem.Text = "Uploaded: " + scn.Upload.ToString() + " GB";
-            totalToolStripMenuItem.Text = "Total: " + scn.Total.ToString() + " GB";
+            downloadedToolStripMenuItem.Text = download.Text;
+            uploadedToolStripMenuItem.Text = upload.Text;
+            totalToolStripMenuItem.Text = total.Text;
 
             if (scn.Percentage >= Properties.Settings.Default.WarningThreshold && !warned)
             {
-                Notify(ToolTipIcon.Warning, "You've reached " + scn.Percentage.ToString() + "% of data usage.");
+                Notify(ToolTipIcon.Warning, string.Format(Properties.Resources.Warning, scn.Percentage));
                 SendMessage(usageBar.Handle, 1040, (IntPtr)2, IntPtr.Zero);
                 warned = true;
             }
@@ -227,7 +256,7 @@ namespace SCNMonitor
         private async void timer_Tick(object sender, EventArgs e)
         {
             timeToReload--;
-            // check.Text = "Reload [" + timeToReload.ToString() + "]";
+            // check.Text = string.Format("{0} [{1}]", Properties.Resources.Check, timeToReload);
             if (timeToReload <= 0)
             {
                 await CheckTransfer();
@@ -276,7 +305,7 @@ namespace SCNMonitor
                 else
                 {
                     timer.Start();
-                    Text = "SCN Monitor";
+                    Text = Properties.Resources.Title;
                 }
             }
 

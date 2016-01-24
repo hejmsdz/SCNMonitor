@@ -32,7 +32,7 @@ namespace SCNMonitor
             }
             else
             {
-                MessageBox.Show("The application is already running - you can find it in the system tray.");
+                MessageBox.Show(Properties.Resources.InstanceRunning);
             }
         }
     }

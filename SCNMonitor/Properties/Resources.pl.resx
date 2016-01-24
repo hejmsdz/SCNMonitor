@@ -118,78 +118,72 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Apply" xml:space="preserve">
-    <value>Apply</value>
+    <value>Zastosuj</value>
   </data>
   <data name="Autodetect" xml:space="preserve">
-    <value>Autodetect if connected to the SCN</value>
+    <value>Automatyczne wykrywanie połączenia z siecią studencką</value>
   </data>
   <data name="Check" xml:space="preserve">
-    <value>Reload</value>
+    <value>Sprawdź</value>
   </data>
   <data name="Checking" xml:space="preserve">
-    <value>Checking...</value>
+    <value>Sprawdzanie...</value>
   </data>
   <data name="CheckInterval" xml:space="preserve">
-    <value>Check your usage every:</value>
+    <value>Sprawdzaj zużycie co:</value>
   </data>
   <data name="ConnectedMsg" xml:space="preserve">
-    <value>You are now connected to the SCN.</value>
+    <value>Połączono z siecią studencką.</value>
   </data>
   <data name="Defaults" xml:space="preserve">
-    <value>Back to defaults</value>
+    <value>Przywróć domyślne</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>Szczegóły</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
-    <value>(disconnected)</value>
+    <value>(odłączony)</value>
   </data>
   <data name="DisconnectedMsg" xml:space="preserve">
-    <value>You are disconnected from the SCN.</value>
+    <value>Odłączono od sieci studenckiej.</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download: {0} GB</value>
+    <value>Pobrano: {0} GB</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Zakończ</value>
   </data>
   <data name="InstanceRunning" xml:space="preserve">
-    <value>The application is already running - you can find it in the system tray.</value>
+    <value>Aplikacja jest już uruchomiona - ikona znajduje się w obszarze powiadomień.</value>
   </data>
   <data name="Minutes" xml:space="preserve">
-    <value>min.</value>
+    <value>min</value>
   </data>
   <data name="Notify" xml:space="preserve">
-    <value>Notify when connected/disconnected</value>
+    <value>Powiadomienie przy połączeniu/rozłączeniu</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>Opcje</value>
   </data>
   <data name="Startup" xml:space="preserve">
-    <value>Run on Windows startup</value>
+    <value>Uruchamianie przy starcie systemu</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
-  <data name="Title" xml:space="preserve">
-    <value>SCN Monitor</value>
-  </data>
   <data name="Total" xml:space="preserve">
-    <value>Total: {0} GB</value>
+    <value>Razem: {0} GB</value>
   </data>
   <data name="Upload" xml:space="preserve">
-    <value>Upload: {0} GB</value>
+    <value>Wysłano: {0} GB</value>
   </data>
   <data name="Usage" xml:space="preserve">
-    <value>Usage</value>
+    <value>Zużycie</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>You've used {0}% of your data limit.</value>
+    <value>Wykorzystano {0}% limitu danych!</value>
   </data>
   <data name="WarningThreshold" xml:space="preserve">
-    <value>Warning threshold:</value>
-  </data>
-  <data name="Percent" xml:space="preserve">
-    <value>%</value>
+    <value>Ostrzeżenie po przekroczeniu:</value>
   </data>
 </root>

@@ -64,11 +64,11 @@
             this.checkIntervalTable = new System.Windows.Forms.TableLayoutPanel();
             this.checkIntervalField = new System.Windows.Forms.NumericUpDown();
             this.checkIntervalLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.minute = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.warningThresholdField = new System.Windows.Forms.NumericUpDown();
             this.warningThresholdLabel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.percent = new System.Windows.Forms.Label();
             this.menu.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.statusTab.SuspendLayout();
@@ -434,7 +434,7 @@
             this.defaultSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.defaultSettings.Location = new System.Drawing.Point(3, 14);
             this.defaultSettings.Name = "defaultSettings";
-            this.defaultSettings.Size = new System.Drawing.Size(101, 23);
+            this.defaultSettings.Size = new System.Drawing.Size(125, 23);
             this.defaultSettings.TabIndex = 21;
             this.defaultSettings.Text = "Back to defaults";
             this.defaultSettings.UseVisualStyleBackColor = true;
@@ -448,7 +448,7 @@
             this.checkIntervalTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.checkIntervalTable.Controls.Add(this.checkIntervalField, 0, 0);
             this.checkIntervalTable.Controls.Add(this.checkIntervalLabel, 0, 0);
-            this.checkIntervalTable.Controls.Add(this.label1, 2, 0);
+            this.checkIntervalTable.Controls.Add(this.minute, 2, 0);
             this.checkIntervalTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkIntervalTable.Location = new System.Drawing.Point(3, 3);
             this.checkIntervalTable.Name = "checkIntervalTable";
@@ -491,16 +491,16 @@
             this.checkIntervalLabel.Text = "Check your usage every:";
             this.checkIntervalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label1
+            // minute
             // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(207, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(197, 24);
-            this.label1.TabIndex = 21;
-            this.label1.Text = "min.";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.minute.AutoSize = true;
+            this.minute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.minute.Location = new System.Drawing.Point(207, 0);
+            this.minute.Name = "minute";
+            this.minute.Size = new System.Drawing.Size(197, 24);
+            this.minute.TabIndex = 21;
+            this.minute.Text = "min.";
+            this.minute.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tableLayoutPanel3
             // 
@@ -510,7 +510,7 @@
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel3.Controls.Add(this.warningThresholdField, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.warningThresholdLabel, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.label2, 2, 0);
+            this.tableLayoutPanel3.Controls.Add(this.percent, 2, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 33);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -538,16 +538,16 @@
             this.warningThresholdLabel.Text = "Warning threshold:";
             this.warningThresholdLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label2
+            // percent
             // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(178, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(226, 24);
-            this.label2.TabIndex = 24;
-            this.label2.Text = "%";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.percent.AutoSize = true;
+            this.percent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.percent.Location = new System.Drawing.Point(178, 0);
+            this.percent.Name = "percent";
+            this.percent.Size = new System.Drawing.Size(226, 24);
+            this.percent.TabIndex = 24;
+            this.percent.Text = "%";
+            this.percent.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MainWindow
             // 
@@ -619,9 +619,9 @@
         private System.Windows.Forms.TableLayoutPanel optionsTable;
         private System.Windows.Forms.TableLayoutPanel optionsButtonsTable;
         private System.Windows.Forms.TableLayoutPanel checkIntervalTable;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label minute;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label percent;
         private System.Windows.Forms.Label warningThresholdLabel;
         private System.Windows.Forms.NumericUpDown warningThresholdField;
         private System.Windows.Forms.Label checkIntervalLabel;
