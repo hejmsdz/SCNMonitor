@@ -130,6 +130,8 @@ namespace SCNMonitor
             int size = 0;
             string text = "?";
 
+            Color line = Properties.Settings.Default.TrayIconColor;
+            Brush bgBrush = new SolidBrush(Color.FromArgb(127, line.R, line.G, line.B));
             Brush normalBrush = new SolidBrush(Properties.Settings.Default.TrayIconColor);
             Brush warnBrush = new SolidBrush(Properties.Settings.Default.TrayIconWarningColor);
             Font font = new Font(FontFamily.GenericSansSerif, 8);
@@ -147,7 +149,10 @@ namespace SCNMonitor
                 Brush textBrush = normalBrush;
                 Brush lineBrush = warned ? warnBrush : normalBrush;
 
-                g.DrawString(text, font, textBrush, 0, 0);
+                SizeF textSize = g.MeasureString(text, font);
+
+                g.DrawString(text, font, textBrush, (16-textSize.Width)/2, 1);
+                g.FillRectangle(bgBrush, 0, 14, 16, 2);
                 g.FillRectangle(lineBrush, 0, 14, size, 2);
 
                 return Icon.FromHandle(bmp.GetHicon());
@@ -206,6 +211,7 @@ namespace SCNMonitor
             {
                 // warning threshold has been increased
                 SendMessage(usageBar.Handle, 1040, (IntPtr)1, IntPtr.Zero);
+                warned = false;
             }
 
             notifyIcon.Icon.Dispose();
