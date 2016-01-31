@@ -22,7 +22,7 @@ namespace SCNMonitor
         private int timeToReload = 0;
         private bool ready = false;
         private bool hidden = false;
-        private bool warned = false;
+        private short alarm = 0;
         private bool exit = false;
 
         delegate void UpdateUICallback();
@@ -147,7 +147,7 @@ namespace SCNMonitor
                 Graphics g = Graphics.FromImage(bmp);
                 
                 Brush textBrush = normalBrush;
-                Brush lineBrush = warned ? warnBrush : normalBrush;
+                Brush lineBrush = (alarm > 0) ? warnBrush : normalBrush;
 
                 SizeF textSize = g.MeasureString(text, font);
 
@@ -195,23 +195,39 @@ namespace SCNMonitor
             upload.Text = string.Format(Properties.Resources.Upload, scn.Upload);
             total.Text = string.Format(Properties.Resources.Total, scn.Total);
             usage.Text = scn.Percentage.ToString() + "%";
-            usageBar.Value = scn.Percentage;
+            usageBar.Value = Math.Min(100, scn.Percentage);
 
             downloadedToolStripMenuItem.Text = download.Text;
             uploadedToolStripMenuItem.Text = upload.Text;
             totalToolStripMenuItem.Text = total.Text;
 
-            if (scn.Percentage >= Properties.Settings.Default.WarningThreshold && !warned)
+            short newAlarm = 0;
+            if (scn.Percentage >= 100)
             {
-                Notify(ToolTipIcon.Warning, string.Format(Properties.Resources.Warning, scn.Percentage));
-                SendMessage(usageBar.Handle, 1040, (IntPtr)2, IntPtr.Zero);
-                warned = true;
+                newAlarm = 2;
             }
-            else if (warned)
+            else if (scn.Percentage >= Properties.Settings.Default.WarningThreshold)
             {
-                // warning threshold has been increased
-                SendMessage(usageBar.Handle, 1040, (IntPtr)1, IntPtr.Zero);
-                warned = false;
+                newAlarm = 1;
+            }
+
+            if (newAlarm != alarm)
+            {
+                alarm = newAlarm;
+                if (alarm == 1)
+                {
+                    Notify(ToolTipIcon.Warning, string.Format(Properties.Resources.Warning, scn.Percentage));
+                    SendMessage(usageBar.Handle, 1040, (IntPtr)3, IntPtr.Zero); // yellow bar
+                }
+                else if (alarm == 2)
+                {
+                    Notify(ToolTipIcon.Error, string.Format(Properties.Resources.Warning, scn.Percentage));
+                    SendMessage(usageBar.Handle, 1040, (IntPtr)2, IntPtr.Zero); // red bar
+                }
+                else
+                {
+                    SendMessage(usageBar.Handle, 1040, (IntPtr)1, IntPtr.Zero); // green bar
+                }
             }
 
             notifyIcon.Icon.Dispose();
