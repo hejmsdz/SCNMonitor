@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -76,6 +77,7 @@ namespace SCNMonitor
             startupCheckbox.Text = Properties.Resources.Startup;
             saveSettings.Text = Properties.Resources.Apply;
             defaultSettings.Text = Properties.Resources.Defaults;
+            aboutTab.Text = Properties.Resources.About;
         }
 
         private void UpdateUI()
@@ -369,6 +371,14 @@ namespace SCNMonitor
             UnsetStartup();
             PopulateSettings();
             saveSettings.Enabled = false;
+        }
+
+        private void linkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            LinkLabel ll = (LinkLabel)sender;
+            string url = (string)ll.Tag;
+            ProcessStartInfo sInfo = new ProcessStartInfo(url);
+            Process.Start(sInfo);
         }
     }
 }

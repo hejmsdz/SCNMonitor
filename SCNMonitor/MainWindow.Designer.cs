@@ -69,6 +69,13 @@
             this.warningThresholdField = new System.Windows.Forms.NumericUpDown();
             this.warningThresholdLabel = new System.Windows.Forms.Label();
             this.percent = new System.Windows.Forms.Label();
+            this.aboutTab = new System.Windows.Forms.TabPage();
+            this.aboutTable = new System.Windows.Forms.TableLayoutPanel();
+            this.appIcon = new System.Windows.Forms.PictureBox();
+            this.scnMonitorLabel = new System.Windows.Forms.Label();
+            this.author = new System.Windows.Forms.Label();
+            this.githubLink = new System.Windows.Forms.LinkLabel();
+            this.iconsLink = new System.Windows.Forms.LinkLabel();
             this.menu.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.statusTab.SuspendLayout();
@@ -85,6 +92,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkIntervalField)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.warningThresholdField)).BeginInit();
+            this.aboutTab.SuspendLayout();
+            this.aboutTable.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.appIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // download
@@ -192,6 +202,7 @@
             // 
             this.tabControl.Controls.Add(this.statusTab);
             this.tabControl.Controls.Add(this.optionsTab);
+            this.tabControl.Controls.Add(this.aboutTab);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
@@ -549,6 +560,100 @@
             this.percent.Text = "%";
             this.percent.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // aboutTab
+            // 
+            this.aboutTab.Controls.Add(this.aboutTable);
+            this.aboutTab.Location = new System.Drawing.Point(4, 22);
+            this.aboutTab.Name = "aboutTab";
+            this.aboutTab.Padding = new System.Windows.Forms.Padding(3);
+            this.aboutTab.Size = new System.Drawing.Size(419, 181);
+            this.aboutTab.TabIndex = 2;
+            this.aboutTab.Text = "About";
+            this.aboutTab.UseVisualStyleBackColor = true;
+            // 
+            // aboutTable
+            // 
+            this.aboutTable.ColumnCount = 1;
+            this.aboutTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.aboutTable.Controls.Add(this.appIcon, 0, 0);
+            this.aboutTable.Controls.Add(this.scnMonitorLabel, 0, 1);
+            this.aboutTable.Controls.Add(this.author, 0, 2);
+            this.aboutTable.Controls.Add(this.githubLink, 0, 3);
+            this.aboutTable.Controls.Add(this.iconsLink, 0, 4);
+            this.aboutTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.aboutTable.Location = new System.Drawing.Point(3, 3);
+            this.aboutTable.Name = "aboutTable";
+            this.aboutTable.RowCount = 5;
+            this.aboutTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.aboutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.aboutTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.aboutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.aboutTable.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.aboutTable.Size = new System.Drawing.Size(413, 175);
+            this.aboutTable.TabIndex = 0;
+            // 
+            // appIcon
+            // 
+            this.appIcon.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.appIcon.Image = ((System.Drawing.Image)(resources.GetObject("appIcon.Image")));
+            this.appIcon.Location = new System.Drawing.Point(3, 3);
+            this.appIcon.Name = "appIcon";
+            this.appIcon.Size = new System.Drawing.Size(407, 84);
+            this.appIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.appIcon.TabIndex = 0;
+            this.appIcon.TabStop = false;
+            // 
+            // scnMonitorLabel
+            // 
+            this.scnMonitorLabel.AutoSize = true;
+            this.scnMonitorLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.scnMonitorLabel.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.scnMonitorLabel.Location = new System.Drawing.Point(3, 90);
+            this.scnMonitorLabel.Name = "scnMonitorLabel";
+            this.scnMonitorLabel.Size = new System.Drawing.Size(407, 37);
+            this.scnMonitorLabel.TabIndex = 1;
+            this.scnMonitorLabel.Text = "SCN Monitor v1.0.0";
+            this.scnMonitorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // author
+            // 
+            this.author.AutoSize = true;
+            this.author.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.author.Location = new System.Drawing.Point(3, 127);
+            this.author.Name = "author";
+            this.author.Size = new System.Drawing.Size(407, 22);
+            this.author.TabIndex = 2;
+            this.author.Text = "Mikołaj Rozwadowski, 2016";
+            this.author.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // githubLink
+            // 
+            this.githubLink.AutoSize = true;
+            this.githubLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.githubLink.Location = new System.Drawing.Point(3, 149);
+            this.githubLink.Name = "githubLink";
+            this.githubLink.Size = new System.Drawing.Size(407, 13);
+            this.githubLink.TabIndex = 3;
+            this.githubLink.TabStop = true;
+            this.githubLink.Tag = "https://github.com/hejmsdz/SCNMonitor";
+            this.githubLink.Text = "https://github.com/hejmsdz/SCNMonitor";
+            this.githubLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.githubLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClicked);
+            // 
+            // iconsLink
+            // 
+            this.iconsLink.AutoSize = true;
+            this.iconsLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.iconsLink.Location = new System.Drawing.Point(3, 162);
+            this.iconsLink.Name = "iconsLink";
+            this.iconsLink.Size = new System.Drawing.Size(407, 13);
+            this.iconsLink.TabIndex = 4;
+            this.iconsLink.TabStop = true;
+            this.iconsLink.Tag = "https://icons8.com/";
+            this.iconsLink.Text = "Icons by icons8.com";
+            this.iconsLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.iconsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -582,6 +687,10 @@
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.warningThresholdField)).EndInit();
+            this.aboutTab.ResumeLayout(false);
+            this.aboutTable.ResumeLayout(false);
+            this.aboutTable.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.appIcon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -626,6 +735,13 @@
         private System.Windows.Forms.NumericUpDown warningThresholdField;
         private System.Windows.Forms.Label checkIntervalLabel;
         private System.Windows.Forms.NumericUpDown checkIntervalField;
+        private System.Windows.Forms.TabPage aboutTab;
+        private System.Windows.Forms.TableLayoutPanel aboutTable;
+        private System.Windows.Forms.PictureBox appIcon;
+        private System.Windows.Forms.Label scnMonitorLabel;
+        private System.Windows.Forms.Label author;
+        private System.Windows.Forms.LinkLabel githubLink;
+        private System.Windows.Forms.LinkLabel iconsLink;
     }
 }
 

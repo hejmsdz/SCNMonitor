@@ -192,4 +192,7 @@
   <data name="Percent" xml:space="preserve">
     <value>%</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
 </root>

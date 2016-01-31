@@ -186,4 +186,7 @@
   <data name="WarningThreshold" xml:space="preserve">
     <value>Ostrzeżenie po przekroczeniu:</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>O programie</value>
+  </data>
 </root>
