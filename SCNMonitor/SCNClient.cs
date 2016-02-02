@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace SCNMonitor
 {
@@ -72,13 +73,23 @@ namespace SCNMonitor
 
         private decimal ExtractDecimal(string data)
         {
+            string numStr;
             decimal num;
             Match match = Regex.Match(data, @"\d+,\d+");
-            if (!match.Success || !decimal.TryParse(match.Value, out num))
+            if (match.Success)
             {
-                throw new TransferCheckException("Failed to match a decimal number!");
+                numStr = match.Value;
+                string point = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+                if (point != ",")
+                {
+                    numStr = numStr.Replace(",", point);
+                }
+                if (decimal.TryParse(numStr, out num))
+                {
+                    return num;
+                }
             }
-            return num;
+            throw new TransferCheckException("Failed to match a decimal number!");
         }
 
         private int ExtractInt(string data)
