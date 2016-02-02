@@ -612,7 +612,7 @@
             this.scnMonitorLabel.Name = "scnMonitorLabel";
             this.scnMonitorLabel.Size = new System.Drawing.Size(407, 37);
             this.scnMonitorLabel.TabIndex = 1;
-            this.scnMonitorLabel.Text = "SCN Monitor v1.0.0";
+            this.scnMonitorLabel.Text = "SCN Monitor";
             this.scnMonitorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // author

@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Deployment.Application;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -53,6 +55,10 @@ namespace SCNMonitor
 
         private void TranslateUI()
         {
+            string version = ApplicationDeployment.IsNetworkDeployed
+                   ? ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString()
+                   : Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            
             Text = Properties.Resources.Title;
             statusTab.Text = Properties.Resources.Status;
             usageBox.Text = Properties.Resources.Usage;
@@ -78,6 +84,7 @@ namespace SCNMonitor
             saveSettings.Text = Properties.Resources.Apply;
             defaultSettings.Text = Properties.Resources.Defaults;
             aboutTab.Text = Properties.Resources.About;
+            scnMonitorLabel.Text = string.Format("{0} v{1}", Properties.Resources.Title, version);
         }
 
         private void UpdateUI()
