@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SCNMonitor
 {
@@ -12,14 +8,7 @@ namespace SCNMonitor
         private bool state;
         public bool State
         {
-            get
-            {
-                return state;
-            }
-            private set
-            {
-                state = value;
-            }
+            get { return state; }
         }
 
         public event EventHandler StateChanged;

@@ -1,18 +1,10 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Deployment.Application;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -187,9 +179,8 @@ namespace SCNMonitor
             {
                 await scn.Transfer();
             }
-            catch (TransferCheckException e)
+            catch (TransferCheckException)
             {
-                // MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             finally
@@ -287,7 +278,6 @@ namespace SCNMonitor
         private async void timer_Tick(object sender, EventArgs e)
         {
             timeToReload--;
-            // check.Text = string.Format("{0} [{1}]", Properties.Resources.Check, timeToReload);
             if (timeToReload <= 0)
             {
                 await CheckTransfer();
@@ -296,7 +286,7 @@ namespace SCNMonitor
 
         private void SetStartup()
         {
-            string exec = '"'+Application.ExecutablePath + '"' + " -hide";
+            string exec = string.Format("\"{0}\" -hide", Application.ExecutablePath);// '"'+Application.ExecutablePath + '"' + " -hide";
             RegistryKey rkApp = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
             rkApp.SetValue("SCNMonitor", exec);
         }

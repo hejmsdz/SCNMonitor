@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
@@ -16,32 +13,21 @@ namespace SCNMonitor
         private decimal download, upload, total;
         private int percentage;
 
-        public decimal Download {
-            get
-            {
-                return download;
-            }
+        public decimal Download
+        {
+            get { return download; }
         }
         public decimal Upload
         {
-            get
-            {
-                return upload;
-            }
+            get { return upload; }
         }
         public decimal Total
         {
-            get
-            {
-                return total;
-            }
+            get { return total; }
         }
         public int Percentage
         {
-            get
-            {
-                return percentage;
-            }
+            get { return percentage; }
         }
 
         private readonly string URL;
