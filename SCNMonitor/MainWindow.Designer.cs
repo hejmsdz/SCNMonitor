@@ -635,8 +635,8 @@
             this.githubLink.Size = new System.Drawing.Size(407, 13);
             this.githubLink.TabIndex = 3;
             this.githubLink.TabStop = true;
-            this.githubLink.Tag = "https://github.com/hejmsdz/SCNMonitor";
-            this.githubLink.Text = "https://github.com/hejmsdz/SCNMonitor";
+            this.githubLink.Tag = "https://mrozwadowski.com/projects/scnmonitor/";
+            this.githubLink.Text = "https://mrozwadowski.com/projects/scnmonitor/";
             this.githubLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.githubLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClicked);
             // 
